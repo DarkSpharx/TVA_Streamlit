@@ -1,0 +1,32 @@
+# Environnements virtuels
+.venv/
+venv/
+env/
+ENV/
+
+# Caches Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Streamlit (secrets, configurations locales)
+.streamlit/secrets.toml
+
+# Fichiers compressés / archives temporaires
+*.zip
+*.tar.gz
+
+# Fichiers système & IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Fichiers de variables d'environnement
+.env
+*.env
+
+# Données volumineuses ou sensibles (optionnel)
+# Décommentez si vous ne souhaitez pas pousser les données sur Git :
+# data/*.csv
