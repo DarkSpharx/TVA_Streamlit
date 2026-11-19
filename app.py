@@ -83,8 +83,11 @@ selection = selection[selection["date_saisie"].dt.date.between(debut, fin)]
 # =============================================================================
 st.title("Qualité du référentiel TVA")
 # TODO AIDE (étape 6a) : une phrase d'aide pour la directrice financière (st.write).
-# TODO DATE_REGLE (étape 6b) : la date de la dernière vérification VIES et la règle pour les non tranchés (st.info).
+st.write("Ce tableau de bord permet de suivre la conformité des numéros de TVA intracommunautaires de nos clients suite à la campagne de vérification VIES. <br><br> Utilisez les filtres dans le panneau latéral à gauche (pays, canal d'origine, période de saisie) pour affiner l'analyse.",unsafe_allow_html=True)
 
+# TODO DATE_REGLE (étape 6b) : la date de la dernière vérification VIES et la règle pour les non tranchés (st.info).
+derniere = df["date_verification"].max()
+st.info(f"Dernière vérification VIES : {derniere:%d/%m/%Y à %H:%M}. Règle : Un numéro non tranché ne doit pas être facturé hors taxe tant qu'il n'a pas été revérifié")
 # =============================================================================
 # ÉTAPE 1 — Les quatre chiffres clés
 # =============================================================================
