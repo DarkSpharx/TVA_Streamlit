@@ -306,3 +306,15 @@ with onglet3:
 # ÉTAPE 10 — Streamlit Community Cloud 
 # =============================================================================
 # https://tva-meridian-darkspharx.streamlit.app/
+
+st.subheader("lien de l'application (Streamlit Community Cloud)")
+
+
+st.markdown(
+    """
+    <a href="https://tva-meridian-darkspharx.streamlit.app/" target="_blank" style="color: red; font-size: 18px; text-decoration: none; font-weight: bold;">
+        🔗 Ouvrir l'application en ligne (Streamlit Cloud)
+    </a>
+    """,
+    unsafe_allow_html=True,
+)
