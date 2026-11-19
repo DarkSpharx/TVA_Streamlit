@@ -133,6 +133,20 @@ st.subheader("D'où viennent les erreurs ?")
 #          deux graphiques en barres horizontales avec la valeur écrite sur chaque barre,
 #          puis une phrase (st.caption) qui explique quel canal sort du lot.
 
+# part de numéros invalides par canal de saisie
+taux = taux_invalides(selection, "source_saisie")
+fig = px.bar(taux, x="taux d'erreur (%)", y="source_saisie", orientation="h",
+text="taux d'erreur (%)", title="Part de numéros invalides par canal de saisie")
+st.plotly_chart(fig)
+
+st.caption("Le canal 'reprise_erp' présente un taux d'invalides nettement supérieur aux autres (~59 % contre ~43 %)."  
+"<br>Cela s'explique par le fait qu'il s'agit de clients anciens importés de l'ancien logiciel sans vérification préalable.", unsafe_allow_html=True,text_alignment="center")
+
+# part de numéros invalides par pays déclaré
+taux = taux_invalides(selection, "pays_declare")
+fig = px.bar(taux, x="taux d'erreur (%)", y="pays_declare", orientation="h",
+text="taux d'erreur (%)", title="Part de numéros invalides par pays déclaré")
+st.plotly_chart(fig)
 # =============================================================================
 # ÉTAPE 5 — Les numéros à traiter
 # =============================================================================
