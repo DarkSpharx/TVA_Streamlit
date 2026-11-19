@@ -150,6 +150,7 @@ taux = taux_invalides(selection, "pays_declare")
 fig = px.bar(taux, x="taux d'erreur (%)", y="pays_declare", orientation="h",
 text="taux d'erreur (%)", title="Part de numéros invalides par pays déclaré")
 st.plotly_chart(fig)
+
 # =============================================================================
 # ÉTAPE 5 — Les numéros à traiter
 # =============================================================================
@@ -181,3 +182,127 @@ st.download_button(
 a_traiter[colonnes].to_csv(index=False, sep=";").encode("utf-8-sig"),
 file_name="numeros_a_traiter.csv",icon=":material/download:",
 )
+
+
+# =============================================================================
+# =============================================================================
+# Pour aller plus loin
+# =============================================================================
+# =============================================================================
+
+# =============================================================================
+# ÉTAPE 8 — Graphiques bonus
+# =============================================================================
+# Graphique temps de réponse VIES
+st.subheader("Graphique des temps de réponse VIES")
+
+temps_pays = (
+    selection.dropna(subset=["temps_reponse_ms"])
+    .groupby("pays_declare")["temps_reponse_ms"]
+    .median()
+    .round(0)
+    .sort_values()
+    .reset_index(name="temps_moyen_ms")
+)
+fig = px.bar(
+    temps_pays,
+    x="temps_moyen_ms",
+    y="pays_declare",
+    orientation="h",
+    text="temps_moyen_ms",
+    title="Temps de réponse moyen par pays (en millisecondes)",
+    labels={"temps_moyen_ms": "Temps moyen (ms)", "pays_declare": "Pays"},
+)
+st.plotly_chart(fig)
+
+st.caption("Le temps de réponse des numéros de TVA italiens présente une médiane supérieure de 119 à 136 millisecondes par rapport aux autres pays", unsafe_allow_html=True,text_alignment="center")
+
+# Graphique nombre de non tranchés par pays
+st.subheader("Graphique du nombre de non tranchés par pays")
+
+donnees_non_tranches = selection[selection["statut"] == "non_tranche"]
+non_tranche_pays = (
+    selection[selection["statut"] == "non_tranche"]
+    .groupby("pays_declare")
+    .size()
+    .sort_values()
+    .reset_index(name="nb_non_tranches")
+)
+
+fig = px.bar(
+    non_tranche_pays,
+    x="nb_non_tranches",
+    y="pays_declare",
+    orientation="h",
+    text="nb_non_tranches",
+    title="Nombre de numéros non tranchés par pays",
+    labels={"nb_non_tranches": "Nombre de non tranchés", "pays_declare": "Pays"}
+)
+st.plotly_chart(fig)
+
+st.caption("L'Italie concentre à elle seule plus de la moitié des cas non tranchés (121 cas sur 213), ce qui est cohérent avec les temps de réponse et timeouts observés sur ce pays", unsafe_allow_html=True,text_alignment="center")
+
+# =============================================================================
+# ÉTAPE 9 — Onglets 
+# =============================================================================
+#Ranger la page en onglets avec st.tabs.
+onglet1, onglet2, onglet3 = st.tabs(["Vue d'ensemble", "Analyse des erreurs", "Actions comptables"])
+
+with onglet1:
+    st.subheader("Combien de numéros ont pu être envoyés à VIES ?")
+    absents = (selection["etape_rejet"] == "absent").sum()
+    doublons = (selection["etape_rejet"] == "doublon").sum() 
+    structure = (selection["etape_rejet"] == "structure").sum()
+    entonnoir = pd.DataFrame({
+    "étape": ["Référentiel", "Sans les absents", "Sans les doublons", "Envoyés à VIES"],
+    "numéros": [total,
+    total - absents,
+    total - absents - doublons,
+    total - absents - doublons - structure],
+    })
+    fig = px.funnel(entonnoir, x="numéros", y="étape",
+    title="Du référentiel aux numéros envoyés à VIES")
+    st.plotly_chart(fig, key="entonnoir_onglet")
+
+with onglet2:
+    st.subheader("D'où viennent les erreurs ?")
+    taux = taux_invalides(selection, "source_saisie")
+    fig = px.bar(taux, x="taux d'erreur (%)", y="source_saisie", orientation="h",
+    text="taux d'erreur (%)", title="Part de numéros invalides par canal de saisie")
+    st.plotly_chart(fig, key="bar_canal_onglet")
+
+    st.caption("Le canal 'reprise_erp' présente un taux d'invalides nettement supérieur aux autres (~59 % contre ~43 %)."  
+    "<br>Cela s'explique par le fait qu'il s'agit de clients anciens importés de l'ancien logiciel sans vérification préalable.", unsafe_allow_html=True,text_alignment="center")
+
+    # part de numéros invalides par pays déclaré
+    taux = taux_invalides(selection, "pays_declare")
+    fig = px.bar(taux, x="taux d'erreur (%)", y="pays_declare", orientation="h",
+    text="taux d'erreur (%)", title="Part de numéros invalides par pays déclaré")
+    st.plotly_chart(fig, key="bar_pays_onglet")
+
+with onglet3:
+    st.subheader("Numéros à traiter")    
+    with st.expander("Voir toutes les données"):
+        st.dataframe(selection, hide_index=True)
+
+    a_traiter = selection[selection["statut"] != "valide"].copy()
+
+    a_traiter["action"] = a_traiter["statut"].map({
+    "invalide": "Demander un nouveau numéro au client",
+    "non_tranche": "Revérifier sur VIES avant la prochaine facture",
+    })
+
+    colonnes = ["raison_sociale", "numero_saisi", "pays_declare", "statut", "motif", "action"]
+    st.write(f"{len(a_traiter)} numéros demandent une action.")
+    st.dataframe(a_traiter[colonnes], hide_index=True)
+
+    st.download_button(
+    "Télécharger la liste",
+    a_traiter[colonnes].to_csv(index=False, sep=";").encode("utf-8-sig"),
+    file_name="numeros_a_traiter.csv",
+    icon=":material/download:",
+    key="download_onglet",
+)
+# =============================================================================
+# ÉTAPE 10 — Streamlit Community Cloud 
+# =============================================================================
