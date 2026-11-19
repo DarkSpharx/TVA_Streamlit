@@ -312,7 +312,7 @@ st.subheader("lien de l'application (Streamlit Community Cloud)")
 
 st.markdown(
     """
-    <a href="https://tva-meridian-darkspharx.streamlit.app/" target="_blank" style="color: red; font-size: 18px; text-decoration: none; font-weight: bold;">
+    <a href="https://tva-meridian-darkspharx.streamlit.app/" target="_blank" style="color: yellowgreen; font-size: 18px; text-decoration: none; font-weight: bold;">
         🔗 Ouvrir l'application en ligne (Streamlit Cloud)
     </a>
     """,
