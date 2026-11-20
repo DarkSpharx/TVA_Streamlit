@@ -151,11 +151,11 @@ onglet1, onglet2, onglet3, onglet4 = st.tabs(["Accueil", "Analyse", "Graphiques"
 
 with onglet1:
     # 1. Le texte de bienvenue et explications
-    accueil.afficher(df)
+    accueil.afficher(selection)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # 2. Les 4 chiffres clés
+    # 2. Les 4 chiffres clés dynamiques basés sur la sélection de la barre latérale
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Numéros", total)
     col2.metric("Valides", valides, f"{valides / total:.1%} du total" if total else "0%", delta_color="off")

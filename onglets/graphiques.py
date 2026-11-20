@@ -34,7 +34,9 @@ def afficher(selection):
             orientation="h",
             text="taux d'erreur (%)",
             title="Part de numéros invalides par canal de saisie",
+            template="plotly_dark" if st.get_option("theme.base") == "dark" else "plotly",
         )
+        fig_canal.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
         st.plotly_chart(fig_canal, use_container_width=True)
         
         st.markdown(
@@ -55,7 +57,9 @@ def afficher(selection):
             orientation="h",
             text="taux d'erreur (%)",
             title="Part de numéros invalides par pays déclaré",
+            template="plotly_dark" if st.get_option("theme.base") == "dark" else "plotly",
         )
+        fig_pays.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
         st.plotly_chart(fig_pays, use_container_width=True)
             
         st.markdown(
@@ -83,7 +87,9 @@ def afficher(selection):
             text="temps_median_ms",
             title="Temps de réponse médian par pays (en millisecondes)",
             labels={"temps_median_ms": "Temps médian (ms)", "pays_declare": "Pays"},
+            template="plotly_dark" if st.get_option("theme.base") == "dark" else "plotly",
         )
+        fig_temps.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
         st.plotly_chart(fig_temps, use_container_width=True)
         
         st.markdown(
@@ -110,7 +116,9 @@ def afficher(selection):
             text="nb_non_tranches",
             title="Nombre de numéros non tranchés par pays",
             labels={"nb_non_tranches": "Nombre de non tranchés", "pays_declare": "Pays"},
+            template="plotly_dark" if st.get_option("theme.base") == "dark" else "plotly",
         )
+        fig_non_tranche.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
         st.plotly_chart(fig_non_tranche, use_container_width=True)
         
         st.markdown(

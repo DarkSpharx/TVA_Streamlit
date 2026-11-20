@@ -35,5 +35,7 @@ def afficher(selection, total):
         x="numéros",
         y="étape",
         title="Du référentiel aux numéros envoyés à VIES",
+        template="plotly_dark" if st.get_option("theme.base") == "dark" else "plotly",
     )
+    fig.update_layout(paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
     st.plotly_chart(fig)
