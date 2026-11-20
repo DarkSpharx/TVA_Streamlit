@@ -1,3 +1,6 @@
 [server]
-# Recharge la page à chaque enregistrement de app.py
 runOnSave = true
+
+[theme]
+primaryColor = "#9ACD32"  # YellowGreen
+base = "dark"
