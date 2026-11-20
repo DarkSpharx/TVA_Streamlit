@@ -7,7 +7,7 @@ Lancement : streamlit run app.py
 import pandas as pd
 import streamlit as st
 
-# Import des 4 modules d'onglets
+# Import des onglets
 from onglets import accueil, analyse, graphiques, fichiers
 
 st.set_page_config(page_title="Référentiel TVA", layout="wide")
@@ -29,7 +29,7 @@ df = charger_donnees()
 # =============================================================================
 # BARRE LATÉRALE
 # =============================================================================
-# 1. Le bouton Dashboard Flat Design
+# 1. CSS bouton Dashboard
 st.sidebar.markdown(
     """
     <style>
@@ -63,7 +63,7 @@ st.sidebar.markdown(
     unsafe_allow_html=True,
 )
 
-# 2. Le liseré sous le bouton
+# 2. Le liseré
 st.sidebar.markdown(
     """
     <div style='height: 2px; background: linear-gradient(90deg, transparent, rgba(154, 205, 50, 0.7), transparent); margin: 20px 0;'></div>
@@ -87,7 +87,7 @@ debut, fin = st.sidebar.slider(
 
 st.sidebar.markdown("<br>", unsafe_allow_html=True)
 
-# 4. Règle VIES placée sous les filtres
+# 4. Info VIES 
 derniere = df["date_verification"].max()
 st.sidebar.info(
     f"Dernière vérification VIES : {derniere:%d/%m/%Y à %H:%M}.\n\n"
@@ -107,7 +107,7 @@ if sources_saisie:
 selection = selection[selection["date_saisie"].dt.date.between(debut, fin)]
 
 # =============================================================================
-# EN-TÊTE : TITRE EN YELLOWGREEN
+# EN-TÊTE
 # =============================================================================
 st.markdown(
     """
@@ -145,17 +145,17 @@ invalides = (selection["statut"] == "invalide").sum()
 non_tranches = (selection["statut"] == "non_tranche").sum()
 
 # =============================================================================
-# LES 4 ONGLETS (Sous le titre)
+# LES ONGLETS
 # =============================================================================
 onglet1, onglet2, onglet3, onglet4 = st.tabs(["Accueil", "Analyse", "Graphiques", "Fichiers"])
 
 with onglet1:
-    # 1. Le texte de bienvenue et explications AU-DESSUS
+    # 1. Le texte de bienvenue et explications
     accueil.afficher(df)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # 2. Les 4 chiffres clés placés EN DESSOUS
+    # 2. Les 4 chiffres clés
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Numéros", total)
     col2.metric("Valides", valides, f"{valides / total:.1%} du total" if total else "0%", delta_color="off")

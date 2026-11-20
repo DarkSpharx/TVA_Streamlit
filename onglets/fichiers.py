@@ -1,7 +1,7 @@
 import streamlit as st
 
 def afficher(selection):
-    # Style CSS pour colorer les boutons en bleu Plotly
+    # Style CSS pour les boutons
     st.markdown(
         """
         <style>
@@ -24,7 +24,7 @@ def afficher(selection):
     )
 
     # -------------------------------------------------------------------------
-    # 1. DONNÉES BRUTES (En premier)
+    # 1. DONNÉES BRUTES
     # -------------------------------------------------------------------------
     st.markdown(
         "<h3 style='text-align: center;'>📦 Données brutes</h3>",
@@ -39,9 +39,12 @@ def afficher(selection):
     with open("data/resultats_vies.csv", "rb") as f:
         csv_brut = f.read()
 
+    with st.expander(f"Voir toutes les données brutes ({len(selection)})"):
+        st.dataframe(selection, hide_index=True)
+    
     col_txt1, col_btn1 = st.columns([2, 1])
     with col_txt1:
-        st.write("")  # Espace équilibré
+        st.write(f"**{len(selection)}** numéros de TVA (données brutes).")
     with col_btn1:
         st.download_button(
             label="Télécharger le fichier brut (CSV)",
@@ -51,10 +54,7 @@ def afficher(selection):
             icon=":material/download:",
             use_container_width=True,
         )
-
-    with st.expander("Voir toutes les données brutes"):
-        st.dataframe(selection, hide_index=True)
-        
+    
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown(
         """
@@ -64,7 +64,7 @@ def afficher(selection):
     )
     
     # -------------------------------------------------------------------------
-    # 2. EXPORT NUMÉROS À TRAITER (En second)
+    # 2. Données filtrées
     # -------------------------------------------------------------------------
     st.markdown(
         "<h3 style='text-align: center;'>📥 Export des numéros à traiter (selon vos filtres)</h3>",
@@ -87,10 +87,14 @@ def afficher(selection):
     
     colonnes = ["raison_sociale", "numero_saisi", "pays_declare", "statut", "motif", "action"]
     
+    # Tableau caché par défaut dans un expander
+    with st.expander(f"Voir les {len(a_traiter)} numéros TVA filtrés"):
+        st.dataframe(a_traiter[colonnes], hide_index=True)
+        
     # Ligne avec le texte à gauche et le bouton à droite
     col_txt, col_btn2 = st.columns([2, 1])
     with col_txt:
-        st.write(f"**{len(a_traiter)}** numéros demandent une action.")
+        st.write(f"**{len(a_traiter)}** numéros TVA filtrés.")
     with col_btn2:
         st.download_button(
             label="Télécharger la liste filtrée (CSV)",
@@ -98,8 +102,4 @@ def afficher(selection):
             file_name="numeros_a_traiter.csv",
             icon=":material/download:",
             use_container_width=True,
-        )
-    
-    # Tableau caché par défaut dans un expander
-    with st.expander(f"Voir les {len(a_traiter)} numéros à traiter"):
-        st.dataframe(a_traiter[colonnes], hide_index=True)
+    )
